@@ -13,6 +13,8 @@ def index():
 
 @app.route("/MessageStatus", methods=['POST'])
 def incoming_sms():
+    errors = []
+    results = {}
     message_sid = request.values.get('MessageSid', None)
     message_status = request.values.get('MessageStatus', None)
     results.append(request)
