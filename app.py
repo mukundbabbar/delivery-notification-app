@@ -5,13 +5,6 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-account_sid = os.environ['TWILIO_ACCOUNT_SID']
-auth_token = os.environ['TWILIO_AUTH_TOKEN']
-status_callback_url = 'https://entk3pf2raoo.x.pipedream.net'
-client = Client(account_sid, auth_token)
-from_number = '+19519163742'
-
-
 @app.route('/', methods=['GET'])
 def index():
     errors = []
