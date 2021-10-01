@@ -28,7 +28,7 @@ def mainpage():
       test = session['test']
       results.append(test)
     else:
-      session['test'] = 'XXXXXXXXXXXXXXX'
+      session['test'] = 'Waiting...'
     return render_template('index.html', errors=errors, results=results)
 
 @app.route("/MessageStatus", methods=['POST'])
