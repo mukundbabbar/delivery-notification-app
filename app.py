@@ -11,14 +11,14 @@ app = Flask(__name__)
 app.secret_key = '9328989fddkf028flkshlf02788'
 
 @app.route('/MessageStatus', methods=['GET'])
-def index():
+def getstatus():
     errors = []
     results = {}
     print(session['test'])
     return (session['test'],200)
 
 @app.route("/", methods=['GET'])
-def incoming_sms():
+def mainpage():
     errors = []
     results = []
     return render_template('index.html', errors=errors, results=results)
