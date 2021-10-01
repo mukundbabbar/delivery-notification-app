@@ -58,6 +58,7 @@ function update() {
                 $.each(items, function (i, item) {
                     trHTML += '<tr><td>' + item.sid + '</td><td>' + item.status + '</td><td>' + item.to + '</td></tr>';
                 });
+		$('#records_table').remove();
                 $('#records_table').append(trHTML);
             }            
         });
