@@ -51,11 +51,11 @@ function update() {
             url: '/MessageStatus',
             success: function (response) {
                 $("response").text(response);
-                item = response.notif
-                console.log(item)
+                items = response.notif
+                console.log(items)
                 console.log(response)
                 var trHTML = '';
-                $.each(response, function (i, item) {
+                $.each(items, function (i, item) {
                     trHTML += '<tr><td>' + item.sid + '</td><td>' + item.status + '</td><td>' + item.to + '</td></tr>';
                 });
                 $('#records_table').append(trHTML);
