@@ -54,13 +54,11 @@ function update() {
                 item = response.notif
                 console.log(item)
                 console.log(response)
-                $.each(response, function(i, item) {
-                    var $tr = $('<tr>').append(
-                        $('<td>').text(item.sid),
-                        $('<td>').text(item.status),
-                        $('<td>').text(item.to)
-        ); //.appendTo('#records_table');
-        console.log($tr.wrap('<p>').html());
+                var trHTML = '';
+                $.each(response, function (i, item) {
+                    trHTML += '<tr><td>' + item.sid + '</td><td>' + item.status + '</td><td>' + item.to + '</td></tr>';
+                });
+                $('#records_table').append(trHTML);
     });
             }            
         });
