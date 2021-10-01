@@ -33,6 +33,8 @@ def incoming_sms():
         message_sid = request.values.get('MessageSid', None)
         message_status = request.values.get('MessageStatus', None)
         session['test'] = request.values
+        print("session vale")
+        print(session['test'])
         results.append(message_status)
         results.append(message_sid)
         results.append(request.values.get('param1', None))
