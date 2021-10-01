@@ -72,8 +72,6 @@ def get_message():
     '''this could be any function that blocks until data is ready'''
     time.sleep(1.0)
     s = time.ctime(time.time())
-    if 'test' in session:
-      s = session['test']
     return s
 
 @app.route('/stream')
