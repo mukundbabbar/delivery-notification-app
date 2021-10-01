@@ -44,6 +44,7 @@ def incoming_sms():
         print(request.values)
         message_sid = request.values.get('MessageSid', None)
         message_status = request.values.get('MessageStatus', None)
+        message_to = request.values.get('To', None)
         results.append(message_status)
         results.append(message_sid)
         results.append(request.values.get('param1', None))
@@ -55,17 +56,14 @@ def incoming_sms():
         if not (data.get('notif') is None):
             print("value is present for given JSON key")
             print(data.get('notif'))
-            data['notif'].append({
-                'sid': message_sid,
-                'status': message_status
-            })
         else:
             print("value is not present for given JSON key")
             data['notif'] = []
-            data['notif'].append({
-                'sid': message_sid,
-                'status': message_status
-            })
+        data['notif'].append({
+            'sid': message_sid,
+            'status': message_status,
+            'to': message_to
+        })
         with open('data.txt', 'w') as outfile:
             json.dump(data, outfile)
     return ('', 204)

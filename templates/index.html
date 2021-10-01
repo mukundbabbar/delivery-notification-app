@@ -20,7 +20,15 @@
     {% endfor %}
     </div>
     <div id="target_div">Watch this space...</div>
-    <div id="response"></div>
+    
+    <table id="records_table" border='1'>
+    <tr>
+        <th>MessageSid</th>
+        <th>MessageStatus</th>
+        <th>To</th>
+    </tr>
+    </table>
+    </body>   
     <script>
       var targetContainer = document.getElementById("target_div");
       var eventSource = new EventSource("/stream")
@@ -43,12 +51,19 @@ function update() {
             url: '/MessageStatus',
             success: function (response) {
                 $("response").text(response);
-                //$("textarea#status").val(response); //send response to textarea
+                $.each(response, function(i, item['notif']) {
+                    var $tr = $('<tr>').append(
+                        $('<td>').text(item.sid),
+                        $('<td>').text(item.status),
+                        $('<td>').text(item.to)
+        ); //.appendTo('#records_table');
+        console.log($tr.wrap('<p>').html());
+    });
             }            
         });
 }
     </script>
     <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  </body>
+ 
 </html>
