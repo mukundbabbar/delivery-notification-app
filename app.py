@@ -40,10 +40,11 @@ def incoming_sms():
         print(request.values)
         message_sid = request.values.get('MessageSid', None)
         message_status = request.values.get('MessageStatus', None)
-        print("BEFORE: " + session['test'])
-        session['test'] = request.values
-        print("session value")
-        print("AFTER:" + session['test'])
+        print("BEFORE")
+        print(session['test'])
+        session['test'] = message_sid
+        print("AFTER:")
+        print(session['test'])
         results.append(message_status)
         results.append(message_sid)
         results.append(request.values.get('param1', None))
