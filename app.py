@@ -1,15 +1,13 @@
 import os
-from functools import lru_cache
 from twilio.rest import Client
 import requests
 import json
 import time
-from time import sleep
-from flask import Flask, render_template, url_for, redirect, session, request, Response
-from flask_sse import sse
+from flask import Flask, render_template, request, Response
 
 app = Flask(__name__)
 app.secret_key = '9328989fddkf028flkshlf027883'
+
 
 @app.route('/MessageStatus', methods=['GET'])
 def getstatus():
@@ -21,13 +19,15 @@ def getstatus():
             data = json.load(json_file)
     except Exception as e:
         print("ERROR in GET, Error reading file or file does not exist")
-    return (data,200)
+    return (data, 200)
+
 
 @app.route("/", methods=['GET'])
 def mainpage():
     errors = []
     results = []
     return render_template('index.html', errors=errors, results=results)
+
 
 @app.route("/MessageStatus", methods=['POST'])
 def incoming_sms():
@@ -58,6 +58,7 @@ def incoming_sms():
         with open('data.txt', 'w') as outfile:
             json.dump(data, outfile)
     return ('', 204)
+
 
 if __name__ == '__main__':
     app.run()

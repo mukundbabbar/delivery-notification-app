@@ -1,72 +1,74 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Twilio Demo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <style>
-      .container {
-        max-width: 1000px;
-      }
-    </style>
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Twilio Delivery Confirmation</h1>
-      <br>
+
+<head>
+  <title>Twilio Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <style>
+    .container {
+      max-width: 1000px;
+    }
+  </style>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Twilio Delivery Confirmation</h1>
+    <br>
     {% for result in results %}
-        {{ result }}<br>
+    {{ result }}<br>
     {% endfor %}
-    </div>
-    <div id="target_div">Watch this space...</div>
-    
-    <table id="records_table" border='1'>
+  </div>
+  <div id="target_div">Watch this space...</div>
+  <br>
+  <table id="records_table" border='1'>
     <tr>
-        <th>MessageSid</th>
-        <th>MessageStatus</th>
-        <th>To</th>
+      <th>MessageSid</th>
+      <th>MessageStatus</th>
+      <th>To</th>
     </tr>
-    </table>
-    </body>   
-    <script>
-      var targetContainer = document.getElementById("target_div");
-      var eventSource = new EventSource("/stream")
-      eventSource.onmessage = function(e) {
-      targetContainer.innerHTML = e.data;
-      };
-    </script>
-    <script>
+  </table>
+</body>
+<script>
+  var targetContainer = document.getElementById("target_div");
+  var eventSource = new EventSource("/stream")
+  eventSource.onmessage = function (e) {
+    targetContainer.innerHTML = e.data;
+  };
+</script>
+<script>
 
-$(window).load(function(){
+  $(window).load(function () {
     update()
-    setInterval(function(){
-        update()
+    setInterval(function () {
+      update()
     }, 10000)
-})
+  })
 
-function update() {
-     console.log('updating')
-        $.ajax({
-            url: '/MessageStatus',
-            success: function (response) {
-                $("response").text(response);
-                items = response.notif
-                console.log(items)
-                console.log(response)
-                var trHTML = '';
-                $.each(items, function (i, item) {
-                    trHTML += '<tr><td>' + item.sid + '</td><td>' + item.status + '</td><td>' + item.to + '</td></tr>';
-                });
-                $(document).ready(function() {
-                    $("#records_table").find("tr:gt(0)").remove();
-                });
-                $('#records_table').append(trHTML);
-            }            
+  function update() {
+    console.log('updating')
+    $.ajax({
+      url: '/MessageStatus',
+      success: function (response) {
+        $("response").text(response);
+        items = response.notif
+        console.log(items)
+        console.log(response)
+        var trHTML = '';
+        $.each(items, function (i, item) {
+          trHTML += '<tr><td>' + item.sid + '</td><td>' + item.status + '</td><td>' + item.to + '</td></tr>';
         });
-}
-    </script>
-    <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
- 
+        $(document).ready(function () {
+          $("#records_table").find("tr:gt(0)").remove();
+        });
+        $('#records_table').append(trHTML);
+      }
+    });
+  }
+</script>
+<script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 </html>
