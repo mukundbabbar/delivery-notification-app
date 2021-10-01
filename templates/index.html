@@ -51,7 +51,7 @@ function update() {
             url: '/MessageStatus',
             success: function (response) {
                 $("response").text(response);
-                $.each(response, function(i, item['notif']) {
+                $.each(response, function(i, item.notif) {
                     var $tr = $('<tr>').append(
                         $('<td>').text(item.sid),
                         $('<td>').text(item.status),
