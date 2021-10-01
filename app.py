@@ -27,11 +27,6 @@ def getstatus():
 def mainpage():
     errors = []
     results = []
-    if 'test' in session:
-      test = session['test']
-      results.append(test)
-    else:
-      session['test'] = 'Waiting...'
     return render_template('index.html', errors=errors, results=results)
 
 @app.route("/MessageStatus", methods=['POST'])
@@ -40,14 +35,10 @@ def incoming_sms():
     results = []
     data = {}
     if request.method == "POST":
-        print(request)
         print(request.values)
         message_sid = request.values.get('MessageSid', None)
         message_status = request.values.get('MessageStatus', None)
         message_to = request.values.get('To', None)
-        results.append(message_status)
-        results.append(message_sid)
-        results.append(request.values.get('param1', None))
         try:
             with open('data.txt') as json_file:
                 data = json.load(json_file)
@@ -67,20 +58,6 @@ def incoming_sms():
         with open('data.txt', 'w') as outfile:
             json.dump(data, outfile)
     return ('', 204)
-
-def get_message():
-    '''this could be any function that blocks until data is ready'''
-    time.sleep(1.0)
-    s = time.ctime(time.time())
-    return s
-
-@app.route('/stream')
-def stream():
-    def eventStream():
-        while True:
-            # wait for source data to be available, then push it
-            yield 'data: {}\n\n'.format(get_message())
-    return Response(eventStream(), mimetype="text/event-stream")
 
 if __name__ == '__main__':
     app.run()
