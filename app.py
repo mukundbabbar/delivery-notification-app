@@ -21,6 +21,9 @@ def getstatus():
 def mainpage():
     errors = []
     results = []
+    if 'test' in session:
+      test = session['test']
+      results.append(test)
     return render_template('index.html', errors=errors, results=results)
 
 @app.route("/MessageStatus", methods=['POST'])
