@@ -8,7 +8,7 @@ from flask import Flask, render_template, url_for, redirect, session, request, R
 from flask_sse import sse
 
 app = Flask(__name__)
-app.secret_key = '9328989fddkf028flkshlf02788'
+app.secret_key = '9328989fddkf028flkshlf027883'
 
 @app.route('/MessageStatus', methods=['GET'])
 def getstatus():
@@ -40,8 +40,8 @@ def incoming_sms():
         print(request.values)
         message_sid = request.values.get('MessageSid', None)
         message_status = request.values.get('MessageStatus', None)
-        session['test'] = request.values
         print("BEFORE: " + session['test'])
+        session['test'] = request.values
         print("session value")
         print("AFTER:" + session['test'])
         results.append(message_status)
