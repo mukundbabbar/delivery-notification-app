@@ -2,6 +2,7 @@ import os
 from functools import lru_cache
 from twilio.rest import Client
 import requests
+import json
 import time
 from time import sleep
 from flask import Flask, render_template, url_for, redirect, session, request, Response
@@ -14,11 +15,15 @@ app.secret_key = '9328989fddkf028flkshlf027883'
 def getstatus():
     errors = []
     results = {}
-    val = ''
-    if 'test' in session:
-      print(session['test'])
-      val = session['test']
-    return (val,200)
+    data = {}
+    with open('data.txt') as json_file:
+        data = json.load(json_file)
+        for p in data['people']:
+            print('Name: ' + p['name'])
+            print('Website: ' + p['website'])
+            print('From: ' + p['from'])
+            print('')
+    return (data,200)
 
 @app.route("/", methods=['GET'])
 def mainpage():
@@ -35,21 +40,19 @@ def mainpage():
 def incoming_sms():
     errors = []
     results = []
+    data = {}
     if request.method == "POST":
         print(request)
         print(request.values)
         message_sid = request.values.get('MessageSid', None)
         message_status = request.values.get('MessageStatus', None)
-        print("BEFORE")
-        print(session['test'])
-        session['test'] = message_sid
-        print("AFTER:")
-        print(session['test'])
         results.append(message_status)
         results.append(message_sid)
         results.append(request.values.get('param1', None))
-        #return redirect(url_for('results'))
-    #return render_template('index.html', errors=errors, results=results)
+        data['message_sid']=message_sid
+        data['message_status']=message_status
+        with open('data.txt', 'w') as outfile:
+            json.dump(data, outfile)
     return ('', 204)
 
 def get_message():
