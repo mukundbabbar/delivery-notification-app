@@ -17,7 +17,13 @@ def index():
     print(session['test'])
     return (session['test'],200)
 
-@app.route("/", methods=['POST', 'GET'])
+@app.route("/", methods=['GET'])
+def incoming_sms():
+    errors = []
+    results = []
+    return render_template('index.html', errors=errors, results=results)
+
+@app.route("/MessageStatus", methods=['POST'])
 def incoming_sms():
     errors = []
     results = []
@@ -31,7 +37,7 @@ def incoming_sms():
         results.append(message_sid)
         results.append(request.values.get('param1', None))
         #return redirect(url_for('results'))
-    return render_template('index.html', errors=errors, results=results)
+    #return render_template('index.html', errors=errors, results=results)
     return ('', 204)
 
 def get_message():
