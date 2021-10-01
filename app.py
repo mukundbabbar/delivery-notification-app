@@ -16,13 +16,11 @@ def getstatus():
     errors = []
     results = {}
     data = {}
-    with open('data.txt') as json_file:
-        data = json.load(json_file)
-        for p in data['people']:
-            print('Name: ' + p['name'])
-            print('Website: ' + p['website'])
-            print('From: ' + p['from'])
-            print('')
+    try:
+        with open('data.txt') as json_file:
+            data = json.load(json_file)
+    except Exception as e:
+        print("ERROR in GET, Error reading file or file does not exist")
     return (data,200)
 
 @app.route("/", methods=['GET'])
@@ -49,8 +47,25 @@ def incoming_sms():
         results.append(message_status)
         results.append(message_sid)
         results.append(request.values.get('param1', None))
-        data['message_sid']=message_sid
-        data['message_status']=message_status
+        try:
+            with open('data.txt') as json_file:
+                data = json.load(json_file)
+        except Exception as e:
+            print("ERROR in POST, Error reading file or file does not exist")
+        if not (data.get('notif') is None):
+            print("value is present for given JSON key")
+            print(data.get('notif'))
+            data['notif'].append({
+                'sid': message_sid,
+                'status': message_status
+            })
+        else:
+            print("value is not present for given JSON key")
+            data['notif'] = []
+            data['notif'].append({
+                'sid': message_sid,
+                'status': message_status
+            })
         with open('data.txt', 'w') as outfile:
             json.dump(data, outfile)
     return ('', 204)
