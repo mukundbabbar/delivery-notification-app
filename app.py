@@ -14,8 +14,11 @@ app.secret_key = '9328989fddkf028flkshlf02788'
 def getstatus():
     errors = []
     results = {}
-    print(session['test'])
-    return (session['test'],200)
+    val = ''
+    if 'test' in session:
+      print(session['test'])
+      val = session['test']
+    return (val,200)
 
 @app.route("/", methods=['GET'])
 def mainpage():
@@ -24,6 +27,8 @@ def mainpage():
     if 'test' in session:
       test = session['test']
       results.append(test)
+    else:
+      session['test'] = 'XXXXXXXXXXXXXXX'
     return render_template('index.html', errors=errors, results=results)
 
 @app.route("/MessageStatus", methods=['POST'])
@@ -49,7 +54,8 @@ def get_message():
     '''this could be any function that blocks until data is ready'''
     time.sleep(1.0)
     s = time.ctime(time.time())
-    s = session['test']
+    if 'test' in session:
+      s = session['test']
     return s
 
 @app.route('/stream')

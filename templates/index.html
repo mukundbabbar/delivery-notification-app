@@ -9,6 +9,7 @@
         max-width: 1000px;
       }
     </style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -19,13 +20,34 @@
     {% endfor %}
     </div>
     <div id="target_div">Watch this space...</div>
-<script>
-    var targetContainer = document.getElementById("target_div");
-var eventSource = new EventSource("/stream")
-  eventSource.onmessage = function(e) {
-  targetContainer.innerHTML = e.data;
-};
-</script>
+    <div id="response"></div>
+    <script>
+      var targetContainer = document.getElementById("target_div");
+      var eventSource = new EventSource("/stream")
+      eventSource.onmessage = function(e) {
+      targetContainer.innerHTML = e.data;
+      };
+    </script>
+    <script>
+
+$(window).load(function(){
+    update()
+    setInterval(function(){
+        update()
+    }, 5000)
+})
+
+function update() {
+     console.log('updating')
+        $.ajax({
+            url: '/MessageStatus',
+            success: function (response) {
+                $("response").text(response);
+                //$("textarea#status").val(response); //send response to textarea
+            }            
+        });
+}
+    </script>
     <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   </body>
