@@ -1,26 +1,53 @@
 import os
+from functools import lru_cache
 from twilio.rest import Client
 import requests
-from flask import Flask, render_template, request
+import time
+from time import sleep
+from flask import Flask, render_template, url_for, redirect, session, request, Response
+from flask_sse import sse
 
 app = Flask(__name__)
+app.secret_key = '9328989fddkf028flkshlf02788'
 
-@app.route('/', methods=['GET'])
+@app.route('/MessageStatus', methods=['GET'])
 def index():
     errors = []
     results = {}
-    return render_template('index.html', errors=errors, results=results)
+    print(session['test'])
+    return (session['test'],200)
 
-@app.route("/MessageStatus", methods=['POST'])
+@app.route("/", methods=['POST', 'GET'])
 def incoming_sms():
     errors = []
-    results = {}
-    message_sid = request.values.get('MessageSid', None)
-    message_status = request.values.get('MessageStatus', None)
-    results.append(request)
+    results = []
+    if request.method == "POST":
+        print(request)
+        print(request.values)
+        message_sid = request.values.get('MessageSid', None)
+        message_status = request.values.get('MessageStatus', None)
+        session['test'] = request.values
+        results.append(message_status)
+        results.append(message_sid)
+        results.append(request.values.get('param1', None))
+        #return redirect(url_for('results'))
     return render_template('index.html', errors=errors, results=results)
-    logging.info('SID: {}, Status: {}'.format(message_sid, message_status))
     return ('', 204)
+
+def get_message():
+    '''this could be any function that blocks until data is ready'''
+    time.sleep(1.0)
+    s = time.ctime(time.time())
+    s = session['test']
+    return s
+
+@app.route('/stream')
+def stream():
+    def eventStream():
+        while True:
+            # wait for source data to be available, then push it
+            yield 'data: {}\n\n'.format(get_message())
+    return Response(eventStream(), mimetype="text/event-stream")
 
 if __name__ == '__main__':
     app.run()
